@@ -1,7 +1,7 @@
 import type {
   InferenceId,
+  ProofId,
   VerificationRecord,
-  VerificationId,
 } from "../../domain/index.js";
 
 /**
@@ -11,7 +11,7 @@ export interface SubmitProofRequest {
   inferenceId: InferenceId;
 
   proof: {
-    id?: VerificationId;
+    id?: ProofId;
 
     system?: string;
 
@@ -21,6 +21,9 @@ export interface SubmitProofRequest {
   };
 }
 
+/**
+ * Response returned after a proof is submitted.
+ */
 export interface SubmitProofResponse {
   verification: VerificationRecord;
 }
@@ -30,4 +33,26 @@ export interface SubmitProofResponse {
  */
 export interface GetVerificationResponse {
   verification: VerificationRecord;
+}
+
+/**
+ * GET /verification
+ */
+export interface ListVerificationsRequest {
+  inferenceId?: InferenceId;
+
+  status?: VerificationRecord["status"];
+
+  limit?: number;
+
+  cursor?: string;
+}
+
+/**
+ * Response for GET /verification.
+ */
+export interface ListVerificationsResponse {
+  items: VerificationRecord[];
+
+  nextCursor?: string;
 }

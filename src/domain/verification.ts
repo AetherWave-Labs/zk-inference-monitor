@@ -1,5 +1,6 @@
 import type {
   InferenceId,
+  ProofId,
   Timestamp,
   VerificationId,
 } from "./common.js";
@@ -7,7 +8,7 @@ import type {
 /**
  * Verification lifecycle.
  *
- * This lifecycle is independent from inference execution.
+ * This lifecycle is independent from inference execution status.
  */
 export type VerificationStatus =
   | "PENDING"
@@ -21,63 +22,106 @@ export type VerificationStatus =
  */
 export interface ProofReference {
   /**
-   * Identifier assigned by the verification subsystem.
+   * Unique proof identifier.
    */
-  id: VerificationId;
+  id: ProofId;
 
   /**
-   * Proof system identifier.
+   * Proof system or verifier implementation.
    *
-   * Examples could include a future verifier implementation name.
+   * Example:
+   * "groth16"
+   * "plonk"
+   * "custom-verifier"
    */
   system?: string;
 
   /**
-   * Optional commitment/hash/reference to the proof.
+   * Optional proof commitment or hash.
    */
   commitment?: string;
 }
 
 /**
- * Result produced by the verifier.
+ * Result returned by a proof verifier.
  */
 export interface VerificationResult {
+  /**
+   * Whether the proof was cryptographically valid.
+   */
   valid: boolean;
 
   /**
-   * Optional verifier-specific information.
+   * Optional verifier-specific result information.
    */
+  details?: unknown;
+}
+
+/**
+ * Error information generated during verification.
+ */
+export interface VerificationError {
+  code: string;
+
+  message: string;
+
   details?: unknown;
 }
 
 /**
  * Core verification record.
  *
- * Verification is associated with an inference but is not part
- * of the inference execution state.
+ * A verification record belongs to an inference but maintains
+ * its own independent lifecycle.
  */
 export interface VerificationRecord {
+  /**
+   * Unique verification identifier.
+   */
   id: VerificationId;
 
+  /**
+   * Inference associated with this verification.
+   */
   inferenceId: InferenceId;
 
+  /**
+   * Current verification status.
+   */
   status: VerificationStatus;
 
+  /**
+   * Proof being verified.
+   */
   proof: ProofReference;
 
+  /**
+   * Time verification was created.
+   */
   createdAt: Timestamp;
 
+  /**
+   * Time verification started.
+   */
   startedAt?: Timestamp;
 
+  /**
+   * Time verification completed.
+   */
   completedAt?: Timestamp;
 
+  /**
+   * Last update time.
+   */
   updatedAt: Timestamp;
 
+  /**
+   * Verification result.
+   */
   result?: VerificationResult;
 
-  error?: {
-    code: string;
-    message: string;
-    details?: unknown;
-  };
+  /**
+   * Verification error.
+   */
+  error?: VerificationError;
 }

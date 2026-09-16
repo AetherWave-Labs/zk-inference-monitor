@@ -4,7 +4,7 @@
 
 export interface LatencyMetrics {
   /**
-   * Time from inference request creation until execution starts.
+   * Time spent waiting before inference execution starts.
    */
   queueLatencyMs?: number;
 
@@ -14,29 +14,32 @@ export interface LatencyMetrics {
   executionLatencyMs?: number;
 
   /**
-   * Time required to complete post-processing.
+   * Time spent performing post-processing.
    */
   processingLatencyMs?: number;
 
   /**
-   * Total observed inference latency.
+   * Total observed latency for the inference.
    */
   totalLatencyMs?: number;
 }
 
+/**
+ * Metrics collected during inference execution.
+ */
 export interface InferenceMetrics extends LatencyMetrics {
   /**
-   * Number of tokens processed, when applicable.
+   * Number of input tokens processed, when applicable.
    */
   inputTokens?: number;
 
   /**
-   * Number of tokens generated, when applicable.
+   * Number of output tokens generated, when applicable.
    */
   outputTokens?: number;
 
   /**
-   * Optional model confidence score.
+   * Model confidence score, when provided by the model.
    */
   confidence?: number;
 }

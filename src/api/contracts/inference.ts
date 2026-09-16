@@ -15,7 +15,7 @@ export interface CreateInferenceRequest {
 }
 
 /**
- * Response returned after creating an inference.
+ * Response returned after an inference is created.
  */
 export interface CreateInferenceResponse {
   inference: InferenceRecord;
@@ -45,6 +45,9 @@ export interface ListInferencesRequest {
   cursor?: string;
 }
 
+/**
+ * Response for GET /inferences.
+ */
 export interface ListInferencesResponse {
   items: InferenceRecord[];
 

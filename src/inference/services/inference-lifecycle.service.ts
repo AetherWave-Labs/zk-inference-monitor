@@ -4,9 +4,14 @@ import type {
   InferenceTransition,
 } from "../../domain/index.js";
 
+/**
+ * Handles valid state transitions for inference execution.
+ *
+ * Verification is intentionally outside this service.
+ */
 export class InferenceLifecycleService {
   /**
-   * Determine whether an inference status transition is valid.
+   * Determine whether a transition is valid.
    */
   canTransition(
     from: InferenceStatus,
@@ -23,8 +28,8 @@ export class InferenceLifecycleService {
   /**
    * Apply a valid inference execution transition.
    *
-   * Verification states are deliberately rejected because they
-   * belong to the verification domain.
+   * The transition type itself prevents verification states such
+   * as VERIFIED from being supplied here.
    */
   transition(
     inference: InferenceRecord,
@@ -32,8 +37,8 @@ export class InferenceLifecycleService {
   ): InferenceRecord {
     if (inference.status !== transition.from) {
       throw new Error(
-        `Invalid transition: expected ${transition.from}, ` +
-        `but inference is currently ${inference.status}`,
+        `Invalid inference transition: expected current status ` +
+        `${transition.from}, but received ${inference.status}`,
       );
     }
 
